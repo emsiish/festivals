@@ -8,12 +8,13 @@ function EventCard(props) {
     const [description, setDescription] = useState("");
     const [date, setDate] = useState("");
     const [price, setPrice] = useState("");
-    const [loading, setLoading] = useState(false);
+    const [loadingDelete, setLoadingDelete] = useState(false);
+    const [loadingUpdate, setLoadingUpdate] = useState(false);
     const [error, setError] = useState(null);
 
     const handleDeleteSubmit = async () => {
         try {
-            setLoading(true);
+            setLoadingDelete(true);
             const res = await fetch('/api/deleteEvent', {
                 method: 'DELETE',
                 headers: { 'Content-Type': 'application/json' },
@@ -29,13 +30,13 @@ function EventCard(props) {
         } catch (err) {
             setError(err.message);
         } finally {
-            setLoading(false);
+            setLoadingDelete(false);
         }
     };
     const handleEditSubmit = async () => {
         let id = props.id;
         try {
-            setLoading(true);
+            setLoadingUpdate(true);
             const res = await fetch('/api/updateEvent', {
                 method: 'PATCH',
                 headers: { 'Content-Type': 'application/json' },
@@ -54,7 +55,7 @@ function EventCard(props) {
         } catch (err) {
             setError(err.message);
         } finally {
-            setLoading(false);
+            setLoadingUpdate(false);
         }
     };
 
@@ -78,9 +79,9 @@ function EventCard(props) {
                         <button
                             type="submitdelete"
                             className="bg-blue-600 p-2 rounded-md hover:bg-blue-700 text-white disabled:bg-gray-400"
-                            disabled={loading}
+                            disabled={loadingDelete}
                         >
-                            {loading ? "Deleting event..." : "Delete"}
+                            {loadingDelete ? "Deleting event..." : "Delete"}
                         </button>
                     </div>
                     <div className="text-red-600">{error}</div>
@@ -102,9 +103,9 @@ function EventCard(props) {
                         <button
                             type="submitedit"
                             className="bg-blue-600 p-2 rounded-md hover:bg-blue-700 text-white disabled:bg-gray-400"
-                            disabled={loading}
+                            disabled={loadingUpdate}
                         >
-                            {loading ? "Editing event..." : "Edit"}
+                            {loadingUpdate ? "Editing event..." : "Edit"}
                         </button>
                     </div>
                     <div className="text-red-600">{error}</div>

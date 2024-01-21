@@ -1,12 +1,13 @@
 import { useState } from 'react';
 
-export function CreateEvent({ addEvent }) {
+export default function CreateEvent({ addEvent }) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [date, setDate] = useState("");
   const [price, setPrice] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+
 
   const handleSubmit = async () => {
     try {
