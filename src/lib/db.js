@@ -21,6 +21,23 @@ const dbPromise = (async () => {
             `
         );
 
+        await db.run(
+            `CREATE TABLE IF NOT EXISTS users ( 
+                    id INTEGER PRIMARY KEY AUTOINCREMENT, 
+                    email TEXT NOT NULL UNIQUE, 
+                    password_hash TEXT NOT NULL
+            )
+            `
+        );
+
+        await db.run(
+            `CREATE TABLE IF NOT EXISTS sessions ( 
+                    id TEXT PRIMARY KEY, 
+                    user_id INTEGER NOT NULL REFERENCES users(id)
+            )
+            `
+        );
+
         return db;
     } catch (err) {
         console.error(err);
