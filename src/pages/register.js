@@ -18,8 +18,8 @@ export default function LoginPage() {
                 const { message } = await res.json();
                 throw new Error(message);
             }
-            const event = await res.json();
-            addEvent((prevEvents) => [newEvent, ...prevEvents]);
+            //const event = await res.json();
+            //addEvent((prevEvents) => [newEvent, ...prevEvents]);
             setEmail('');
             setPassword('');
         } catch (err) {
@@ -32,7 +32,7 @@ export default function LoginPage() {
     return (
         <div className="min-h-screen flex items-center justify-center bg-blue-500">
             <div className="bg-white p-8 shadow-md rounded-md">
-                <h2 className="text-2xl font-bold mb-4">Create Event</h2>
+                <h2 className="text-2xl font-bold mb-4">Register</h2>
                 <form onSubmit={handleSubmit}>
                     <div className="mb-4">
                         <input type="text" className="border rounded-md w-full" placeholder="Enter email" onChange={(event) => setEmail(event.target.value)} value={email} />
