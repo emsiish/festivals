@@ -7,11 +7,11 @@ export default async function handler(req, res) {
         res.status(405).json({ message: "Only POST requests allowed" });
         return;
     }
-    const { email, password } = req.body;
+    const { email, password, role } = req.body;
 
     const passwordHash = await bcrypt.hash(password, saltRounds);
 
-    await db.run("INSERT INTO users (email, password_hash) VALUES (?, ?)", [email, passwordHash]);
+    await db.run("INSERT INTO users (email, password_hash, role) VALUES (?, ?, ?)", [email, passwordHash, role]);
 
     res.json({});
 }

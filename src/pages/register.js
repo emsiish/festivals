@@ -3,8 +3,11 @@ import {useState} from "react";
 export default function LoginPage() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [role, setRole] = useState("user");
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+
+    const roles = ["user","admin"];
 
     const handleSubmit = async () => {
         try {
@@ -22,6 +25,7 @@ export default function LoginPage() {
             //addEvent((prevEvents) => [newEvent, ...prevEvents]);
             setEmail('');
             setPassword('');
+            setRole("user");
         } catch (err) {
             setError(err.message);
         } finally {
@@ -40,11 +44,16 @@ export default function LoginPage() {
                     <div className="mb-4">
                         <input type="password" className="border rounded-md w-full" placeholder="Enter password" onChange={(event) => setPassword(event.target.value)} value={password} />
                     </div>
+                    <div className="mb-4">
+                        <select className="border rounded-md w-full" value={role} onChange={(event) => setRole(event.target.value)}>
+                            {roles.map((role,index) => {<a>{role}</a>})}
+                        </select>
+                    </div>
                     <div className="mb-4 flex items-center justify-center">
                         <button
                             type="submit"
                             className="bg-blue-600 p-2 rounded-md hover:bg-blue-700 text-white disabled:bg-gray-400"
-                            disabled={!email || !password || loading}
+                            disabled={!email || !password || !role|| loading}
                         >
                             {loading ? "Registering..." : "Register"}
                         </button>
