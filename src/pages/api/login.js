@@ -29,5 +29,10 @@ export default async function handler(req, res) {
 
     res.setHeader("Set-Cookie", `session=${session}; HttpOnly; Path=/;`);
 
-    res.json({});
+    res.json({
+        user: {
+          id: user.id,
+          email: user.email,
+        },
+      });
 }

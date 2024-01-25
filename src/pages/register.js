@@ -1,4 +1,5 @@
 import {useState} from "react";
+import Link from 'next/link';
 
 export default function LoginPage() {
     const [email, setEmail] = useState("");
@@ -15,7 +16,7 @@ export default function LoginPage() {
             const res = await fetch('/api/register', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, password }),
+                body: JSON.stringify({ email, password, roles }),
             });
             if (!res.ok) {
                 const { message } = await res.json();
@@ -46,7 +47,9 @@ export default function LoginPage() {
                     </div>
                     <div className="mb-4">
                         <select className="border rounded-md w-full" value={role} onChange={(event) => setRole(event.target.value)}>
-                            {roles.map((role,index) => {<a>{role}</a>})}
+                            {roles.map((role,index) => (
+                                <option key={index} value={role}>{role}</option>
+                                ))}
                         </select>
                     </div>
                     <div className="mb-4 flex items-center justify-center">
@@ -58,6 +61,7 @@ export default function LoginPage() {
                             {loading ? "Registering..." : "Register"}
                         </button>
                     </div>
+                    <Link href="/login" className="text-blue-600">Already have an account?</Link>
                     <div className="text-red-600">{error}</div>
                 </form>
             </div>

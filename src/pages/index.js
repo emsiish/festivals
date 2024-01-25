@@ -1,7 +1,6 @@
 import { db } from '@/lib/db';
 import { useState, useEffect } from 'react';
 import EventCard from './EventCard';
-import { CreateEvent } from './CreateEventPage';
 import NavBar from './NavBar';
 
 const deleteEvent = (eventToDelete, prevEvents) => {
@@ -15,7 +14,7 @@ const handleDeleteEvent = (indexToDelete) => {
 };
 
 
-export default function Home({ initialEvents }) {
+export default function Home({ initialEvents, user }) {
   const [events, setEvents] = useState(initialEvents);
   const [filter, setFilter] = useState('');
 
@@ -25,11 +24,15 @@ export default function Home({ initialEvents }) {
     );
     setEvents(filteredEvents);
 
+
+
   }, [filter]);
 
   return (
     <div className="">
-      <NavBar title="Event website" onFilterChange={(value) => setFilter(value)}/>
+      <NavBar title="Event website" onFilterChange={(value) => setFilter(value) }/>
+      <div className='flex items-center justify-center text-3xl font-bold'>Welcome, {user?.email || 'Guest'} </div>
+      <div className='flex items-center justify-center text-3xl font-bold'>Role {user?.role || 'Guest'} </div>
       {/*<CreateEvent addEvent={(event) => setEvents([event, ...events])} />*/}
       <div className="text-3xl">Recent events</div>
       
@@ -49,7 +52,26 @@ export default function Home({ initialEvents }) {
   )
 }
 
-export async function getServerSideProps() {
+export async function getServerSideProps(context) {
+  const { req } = context;
+
+  const session = req.cookies.session;
+  let user = null;
+
+  if (session) {
+    const userSession = await db.get('SELECT user_id FROM sessions WHERE id = ?', session);
+
+    if (userSession) {
+      user = await db.get('SELECT id, email FROM users WHERE id = ?', userSession.user_id);
+    }
+  }
+
   const events = await db.all("SELECT * FROM events ORDER BY id DESC");
-  return { props: { initialEvents: events, } };
+
+  return {
+    props: {
+      initialEvents: events,
+      user: user || null,
+    },
+  };
 }
