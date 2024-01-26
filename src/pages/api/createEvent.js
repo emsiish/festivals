@@ -28,7 +28,7 @@ export default async function handler(req, res) {
         })
     }
 
-    const { lastID } = await db.run("INSERT INTO events (title, description, date, price) VALUES (?, ?, ?, ?)", [title, description + "created by " + currentUser.email, date, price]);
+    const { lastID } = await db.run("INSERT INTO events (title, description, date, price) VALUES (?, ?, ?, ?)", [title, description + " created by " + currentUser.email, date, price]);
 
     const event = await db.get("SELECT * FROM events WHERE id = ?", lastID);
 

@@ -1,7 +1,7 @@
 import {db} from '@/lib/db';
 import {useEffect, useState} from 'react';
 import EventCard from './EventCard';
-import NavBar from './NavBar';
+import Link from "next/link";
 
 export default function Home({ initialEvents, user }) {
   const [events, setEvents] = useState(initialEvents);
@@ -37,9 +37,26 @@ export default function Home({ initialEvents, user }) {
 
   }, [filter]);
 
+  const handleFilterChange = (event) => {
+    const value = event.target.value;
+    setFilter(value);
+  };
+
   return (
     <div className="">
-      <NavBar title="Event website" onFilterChange={(value) => setFilter(value) }/>
+      <div className="bg-blue-500 flex items-center justify-center h-20 p-3">
+        <div className="bg-blue-950 w-1/4 flex items-center justify-center rounded-md m-4 h-full">
+          <h1 className="text-xl text-white">Event Website</h1>
+        </div>
+
+        <div className="w-3/4 grid grid-cols-3 m-4">
+          { isAdmin && (
+          <Link href="/CreateEventPage" className="h-full col-start-2 rounded-md bg-blue-950 m-2 mt-0 flex items-center justify-center text-white">Create Event</Link>
+            )}
+          <input className="col-start-3 rounded-md h-full m-2 mt-0" placeholder="Enter event name" value={filter} onChange={handleFilterChange}/>
+        </div>
+
+      </div>
       <div className='flex items-center justify-center text-3xl font-bold'>Welcome, {user?.email || 'Guest'} </div>
       <div className='flex items-center justify-center text-3xl font-bold'>Role {user?.role || 'Guest'} </div>
       <div className="text-3xl">Recent events</div>

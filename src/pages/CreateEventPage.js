@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import {useRouter} from "next/router";
 
 export default function CreateEvent({ addEvent }) {
   const [title, setTitle] = useState("");
@@ -7,6 +8,7 @@ export default function CreateEvent({ addEvent }) {
   const [price, setPrice] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const router = useRouter();
 
 
   const handleSubmit = async (event) => {
@@ -23,7 +25,7 @@ export default function CreateEvent({ addEvent }) {
         throw new Error(message);
       }
       const event = await res.json();
-      addEvent((prevEvents) => [event, ...prevEvents]);
+      await router.push("/");
       setTitle('');
       setDescription('');
       setDate('');

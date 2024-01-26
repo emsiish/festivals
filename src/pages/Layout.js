@@ -13,10 +13,9 @@ const Layout = ({ children }) => {
 
         if (data.isAuthenticated) {
           setIsAuthenticated(true);
-          router.push('/');
         } else {
           if (router.pathname !== '/login' && router.pathname !== '/register') {
-            router.push('/login');
+            await router.push('/login');
           }
         }
       } catch (error) {
