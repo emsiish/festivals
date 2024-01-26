@@ -16,14 +16,12 @@ export default function LoginPage() {
             const res = await fetch('/api/register', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, password, roles }),
+                body: JSON.stringify({ email, password, role }),
             });
             if (!res.ok) {
                 const { message } = await res.json();
                 throw new Error(message);
             }
-            //const event = await res.json();
-            //addEvent((prevEvents) => [newEvent, ...prevEvents]);
             setEmail('');
             setPassword('');
             setRole("user");

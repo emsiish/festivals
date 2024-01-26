@@ -4,13 +4,13 @@ import { useState } from 'react';
 function NavBar(props)
 {
 
-    const [filter, setFilter] = useState(''); 
+    const [filter, setFilter] = useState('');
 
     const handleFilterChange = (event) => {
         const value = event.target.value;
         setFilter(value);
         props.onFilterChange(value);
-      };
+    };
 
     return(
         <div className="bg-blue-500 flex items-center justify-center h-20 p-3">

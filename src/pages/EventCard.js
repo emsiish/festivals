@@ -18,14 +18,15 @@ function EventCard(props) {
             const res = await fetch('/api/deleteEvent', {
                 method: 'DELETE',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(props.title),
+                body: JSON.stringify({ title: props.title }),
             });
+
             if (!res.ok) {
                 const { message } = await res.json();
                 throw new Error(message);
             }
-            const event = await res.json();
-            props.deleteEvent(() => [removedEvent]);
+
+            await props.handleDeleteEvent(props.title);
 
         } catch (err) {
             setError(err.message);
@@ -33,6 +34,7 @@ function EventCard(props) {
             setLoadingDelete(false);
         }
     };
+
     const handleEditSubmit = async () => {
         let id = props.id;
         try {
@@ -46,8 +48,11 @@ function EventCard(props) {
                 const { message } = await res.json();
                 throw new Error(message);
             }
-            const event = await res.json();
-            addEvent((prevEvents) => [newEvent, ...prevEvents]);
+            const updatedEvent = await res.json();
+
+            props.handleUpdateEvent(updatedEvent);
+
+
             setTitle('');
             setDescription('');
             setDate('');
@@ -58,6 +63,8 @@ function EventCard(props) {
             setLoadingUpdate(false);
         }
     };
+
+
 
     return (
         <div className="bg-white rounded-md border-solid border-2 border-black m-4 p-4">
@@ -76,16 +83,19 @@ function EventCard(props) {
             <div>
                 <form onSubmit={handleDeleteSubmit}>
                     <div className="mb-4 flex items-center justify-center">
-                        <button
-                            type="submitdelete"
-                            className="bg-blue-600 p-2 rounded-md hover:bg-blue-700 text-white disabled:bg-gray-400"
-                            disabled={loadingDelete}
-                        >
-                            {loadingDelete ? "Deleting event..." : "Delete"}
-                        </button>
+                        {props.isAdmin && (
+                            <button
+                                type="submitdelete"
+                                className="bg-blue-600 p-2 rounded-md hover:bg-blue-700 text-white disabled:bg-gray-400"
+                                disabled={loadingDelete}
+                            >
+                                {loadingDelete ? "Deleting event..." : "Delete"}
+                            </button>
+                        )}
                     </div>
                     <div className="text-red-600">{error}</div>
                 </form>
+                {props.isAdmin && (
                 <form onSubmit={handleEditSubmit}>
                     <div className="mb-4">
                         <input type="text" className="border rounded-md w-full" placeholder="Enter new title" onChange={(event) => setTitle(event.target.value)} value={title} />
@@ -100,16 +110,16 @@ function EventCard(props) {
                         <input type="number" className="border rounded-md w-full" placeholder="Enter new price" onChange={(event) => setPrice(event.target.value)} value={price} />
                     </div>
                     <div className="mb-4 flex items-center justify-center">
-                        <button
-                            type="submitedit"
-                            className="bg-blue-600 p-2 rounded-md hover:bg-blue-700 text-white disabled:bg-gray-400"
-                            disabled={loadingUpdate}
-                        >
-                            {loadingUpdate ? "Editing event..." : "Edit"}
-                        </button>
+                            <button
+                                type="submitedit"
+                                className="bg-blue-600 p-2 rounded-md hover:bg-blue-700 text-white disabled:bg-gray-400"
+                                disabled={loadingUpdate}
+                            >
+                                {loadingUpdate ? "Editing event..." : "Edit"}
+                            </button>
                     </div>
                     <div className="text-red-600">{error}</div>
-                </form>
+                </form>)}
             </div>
         </div>
     )

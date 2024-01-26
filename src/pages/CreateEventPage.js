@@ -9,7 +9,8 @@ export default function CreateEvent({ addEvent }) {
   const [error, setError] = useState(null);
 
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (event) => {
+    event.preventDefault();
     try {
       setLoading(true);
       const res = await fetch('/api/createEvent', {
@@ -22,7 +23,7 @@ export default function CreateEvent({ addEvent }) {
         throw new Error(message);
       }
       const event = await res.json();
-      addEvent((prevEvents) => [newEvent, ...prevEvents]);
+      addEvent((prevEvents) => [event, ...prevEvents]);
       setTitle('');
       setDescription('');
       setDate('');

@@ -1,5 +1,6 @@
 import {useState} from "react";
 import Link from 'next/link';
+import {useRouter} from "next/router";
 
 export default function LoginPage() {
     const [email, setEmail] = useState("");
@@ -7,6 +8,7 @@ export default function LoginPage() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
+    const router = useRouter();
     const handleSubmit = async () => {
         event.preventDefault();
         try {
@@ -20,8 +22,7 @@ export default function LoginPage() {
                 const { message } = await res.json();
                 throw new Error(message);
             }
-            //const event = await res.json();
-            //addEvent((prevEvents) => [newEvent, ...prevEvents]);
+            await router.push("/");
             setEmail('');
             setPassword('');
         } catch (err) {
